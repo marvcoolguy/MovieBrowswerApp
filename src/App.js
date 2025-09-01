@@ -3,39 +3,44 @@ import { useState, useEffect } from "react";
 import NavBar from "./Components/Navbar";
 import Home from "./Components/Home";
 import AboutView from "./Components/About";
-import { Route, Switch } from "react-router-dom";
 import SearchView from "./Components/SearchView";
 
 function App() {
   const [searchResults, setSearchResults] = useState([]);
   const [searchText, setSearchText] = useState("");
 
+  // Fetch movies from TMDb when searchText changes
   useEffect(() => {
     if (searchText) {
       fetch(
-        `https://api.themoviedb.org/3/search/movie?api_key=cffb203759856cc55c8c7a974fe4e834&language=en-US&query=${searchText}&page=1&include_adult=false`
+        `https://api.themoviedb.org/3/search/movie?api_key=YOUR_API_KEY&language=en-US&query=${searchText}&page=1&include_adult=false`
       )
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
-          setSearchResults(data.results);
-        });
+          setSearchResults(data.results || []);
+        })
+        .catch((err) => console.error("Error fetching data:", err));
     }
   }, [searchText]);
 
-  return (
-    <div className="App">
-      <NavBar searchText={searchText} setSearchText={setSearchText} />
-      <Switch>
-        <Route exact path="/">
-          <Home />
-        </Route>
-        <Route path="/about" component={AboutView} />
-        <Route path="/search" exact>
-          <SearchView keyword={searchText} searchResults={searchResults} />
-        </Route>
-      </Switch>
+  // Simple hash routing for GitHub Pages
+  const hash = window.location.hash;
 
+  return (
+    <div className="App d-flex flex-column min-vh-100">
+      <NavBar searchText={searchText} setSearchText={setSearchText} />
+
+      <main className="flex-fill">
+        {hash === "" || hash === "#/" ? (
+          <Home />
+        ) : hash === "#/about" ? (
+          <AboutView />
+        ) : hash.startsWith("#/search") ? (
+          <SearchView keyword={searchText} searchResults={searchResults} />
+        ) : (
+          <Home /> // fallback for unknown routes
+        )}
+      </main>
     </div>
   );
 }
