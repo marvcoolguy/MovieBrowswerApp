@@ -3,13 +3,13 @@ import { useState, useEffect } from "react";
 import NavBar from "./Components/Navbar";
 import Home from "./Components/Home";
 import AboutView from "./Components/About";
+import { Route, Switch } from "react-router-dom";
 import SearchView from "./Components/SearchView";
 
 function App() {
   const [searchResults, setSearchResults] = useState([]);
   const [searchText, setSearchText] = useState("");
 
-  // Fetch movies from TMDb when searchText changes
   useEffect(() => {
     if (searchText) {
       fetch(
@@ -17,30 +17,26 @@ function App() {
       )
         .then((response) => response.json())
         .then((data) => {
-          setSearchResults(data.results || []);
-        })
-        .catch((err) => console.error("Error fetching data:", err));
+          console.log(data);
+          setSearchResults(data.results);
+        });
     }
   }, [searchText]);
 
-  // Simple hash routing for GitHub Pages
-  const hash = window.location.hash;
-
   return (
-    <div className="App d-flex flex-column min-vh-100">
+    <div className="App">
       <NavBar searchText={searchText} setSearchText={setSearchText} />
-
-      <main className="flex-fill">
-        {hash === "" || hash === "#/" ? (
+      <Switch>
+        <Route exact path="/">
           <Home />
-        ) : hash === "#/about" ? (
-          <AboutView />
-        ) : hash.startsWith("#/search") ? (
+        </Route>
+        <Route path="/about" component={AboutView} />
+        <Route path="/search" exact>
           <SearchView keyword={searchText} searchResults={searchResults} />
-        ) : (
-          <Home /> // fallback for unknown routes
-        )}
-      </main>
+        </Route>
+        <Route path="*" element={<NotFound />} />
+      </Switch>
+
     </div>
   );
 }
