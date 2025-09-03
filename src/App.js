@@ -5,6 +5,7 @@ import Home from "./Components/Home";
 import AboutView from "./Components/About";
 import { Route, Switch } from "react-router-dom";
 import SearchView from "./Components/SearchView";
+import NotFound from "./Components/NotFound";
 
 function App() {
   const [searchResults, setSearchResults] = useState([]);
@@ -34,7 +35,7 @@ function App() {
         <Route path="/search" exact>
           <SearchView keyword={searchText} searchResults={searchResults} />
         </Route>
-        <Route path="*" element={<NotFound />} />
+        <Route path="*" component={<NotFound />} />
       </Switch>
 
     </div>
