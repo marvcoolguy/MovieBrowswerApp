@@ -13,7 +13,7 @@ function App() {
   useEffect(() => {
     if (searchText) {
       fetch(
-        `https://api.themoviedb.org/3/search/movie?api_key=YOUR_API_KEY&language=en-US&query=${searchText}&page=1&include_adult=false`
+        `https://api.themoviedb.org/3/search/movie?api_key=cffb203759856cc55c8c7a974fe4e834&language=en-US&query=${searchText}&page=1&include_adult=false`
       )
         .then((response) => response.json())
         .then((data) => {

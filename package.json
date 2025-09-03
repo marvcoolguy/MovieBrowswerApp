@@ -1,6 +1,6 @@
 {
   "name": "moviebrowser",
-  "homepage": "https://marvcoolguy.github.io/MovieBrowswerApp",
+  "homepage": "https://movie-browswer-app.vercel.app/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
